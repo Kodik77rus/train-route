@@ -9,6 +9,4 @@ export const combineLocation = (latitude, longitude) => {
   return coords;
 };
 
-export const parseTempForTimeInterval = () => {
-
-};
+export const parseTemprtForTimeInterval = () => {};

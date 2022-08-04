@@ -11,7 +11,7 @@ export const LocoMarker = (props) => {
   return (
     <Marker position={location} key={type}>
       <Tooltip>
-        <div>{type} point</div>
+        <div>{type} marker</div>
         <div>loco type: {locoType}</div>
         <div>loco number: {locoNumber}</div>
         <div>loco timestamp: {timestamp}</div>

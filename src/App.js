@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 import { LocoMarker } from "./components";
-import { parseTempForTimeInterval, combineLocation } from "./utils";
+import { parseTemprtForTimeInterval, combineLocation } from "./utils";
 import { getFileFromSrver } from "./services";
 
 import "./App.css";
@@ -11,13 +11,12 @@ const App = () => {
   const [locoInfo, setLocoInfo] = useState(false);
   const [locoStartPoint, setLocoStartPoint] = useState(false);
   const [locoEndPoint, setLocoEndPoint] = useState(false);
-  // const [locoPolyline, setLocoPolyline] = useState({});
+  // const [locoPolyline, setLocoPolyline] = useState(false);
 
   const loadInitialState = async () => {
-    // const temp = await getFileFromSrver("temperatures.json");
     const coords = await getFileFromSrver("location.json");
+    // const temp = await getFileFromSrver("temperatures.json");
 
-    // const { Timestamp: tempTimestamp, OutsideTemp: outsideTemp } = temp;
     const {
       Timestamp: coordsTimestamp,
       LocoType: locoType,
@@ -25,13 +24,21 @@ const App = () => {
       Latitude: latitude,
       Longitude: longitude,
     } = coords;
+    // const { Timestamp: temprtTimestamp, OutsideTemp: outsideTemp } = temp;
 
     const parsedLocation = combineLocation(latitude, longitude);
+    // const polyline = parseTemprtForTimeInterval({
+    //   locoLocation: {
+    //     parsedLocation,
+    //     coordsTimestamp,
+    //   },
+    //   temp: {
+    //     temprtTimestamp,
+    //     outsideTemp,
+    //   },
+    // });
 
-    setLocoInfo({
-      locoType,
-      locoNumber,
-    });
+    setLocoInfo({ locoType, locoNumber });
     setLocoStartPoint({
       timestamp: coordsTimestamp[0],
       location: parsedLocation[0],
@@ -40,25 +47,14 @@ const App = () => {
       timestamp: coordsTimestamp[coordsTimestamp.length - 1],
       location: parsedLocation[parsedLocation.length - 1],
     });
-    setLocoPolyline(
-      parseTempForTimeInterval({
-        locoLocation: {
-          parsedLocation,
-          coordsTimestamp,
-        },
-        temp: {
-          tempTimestamp,
-          outsideTemp,
-        },
-      })
-    );
+    // setLocoPolyline(polyline);
   };
 
   useEffect(() => {
     loadInitialState();
   }, []);
 
-  return !locoStartPoint ? (
+  return !locoPolyline ? (
     <div>Loading...</div>
   ) : (
     <MapContainer
